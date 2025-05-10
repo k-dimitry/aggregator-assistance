@@ -2,6 +2,11 @@
 Thumbs.db
 db.json
 *.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+/static/
 node_modules
 dist
 venv
