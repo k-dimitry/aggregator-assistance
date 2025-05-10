@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "audience.apps.AudienceConfig",
     "catalog.apps.CatalogConfig",
     "chatbot.apps.ChatbotConfig",
+    "documents.apps.DocumentsConfig",
     "events.apps.EventsConfig",
     "main.apps.MainConfig",
     "news.apps.NewsConfig",
