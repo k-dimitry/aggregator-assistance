@@ -9,4 +9,4 @@ local_settings.py
 /static/
 node_modules
 dist
-venv
+venv/
