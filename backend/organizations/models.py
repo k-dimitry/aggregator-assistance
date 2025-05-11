@@ -81,8 +81,8 @@ class Organization(models.Model):
     # longitude = models.FloatField("Долгота")
     
     """Связи"""
-    assistance = models.ManyToManyField(Assistance, related_name='Помощь', verbose_name='Категории')
-    services = models.ManyToManyField(Servis, related_name='Услуги', verbose_name='Услуги')
+    assistance = models.ManyToManyField(Assistance, related_name='Помощь', verbose_name='Категории', null=True, blank=True)
+    services = models.ManyToManyField(Servis, related_name='Услуги', verbose_name='Услуги', null=True, blank=True)
     # event = models.ManyToManyField(Event, verbose_name="Мероприятия")
 	
 

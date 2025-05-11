@@ -47,7 +47,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         addresses = obj.address.all()
         # Формируем HTML-список адресов
         address_list = [
-            f"<li>{address}</li>" 
+            f"{address}" 
             for address in addresses
         ]
         return format_html("<ul>{}</ul>", "".join(address_list)) if address_list else "-"
@@ -71,7 +71,6 @@ class AddressAdmin(admin.ModelAdmin):
     def city(self, obj):
         return obj.city_region.city if obj.city_region else None
 
-admin.site.register(Address, AddressAdmin)
 
 admin.site.register(Servis, ServisAdmin)
 admin.site.register(Event, EventAdmin)

@@ -16,8 +16,32 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from dal import autocomplete
+
+from organizations.models import CityRegion, City, SubRegion
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    
+    # Автозаполнение для CityRegion
+    path(
+        'city_region-autocomplete/',
+        autocomplete.Select2QuerySetView.as_view(model=CityRegion),
+        name='city_region-autocomplete'
+    ),
+    
+    # Автозаполнение для City
+    path(
+        'city-autocomplete/',
+        autocomplete.Select2QuerySetView.as_view(model=City),
+        name='city-autocomplete'
+    ),
+    
+    # Автозаполнение для SubRegion
+    path(
+        'sub_region-autocomplete/',
+        autocomplete.Select2QuerySetView.as_view(model=SubRegion),
+        name='sub_region-autocomplete'
+    ),
 ]
