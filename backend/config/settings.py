@@ -41,17 +41,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     
     # apps
-    "assistance.apps.AssistanceConfig",
-    "audience.apps.AudienceConfig",
-    "catalog.apps.CatalogConfig",
-    "chatbot.apps.ChatbotConfig",
-    "events.apps.EventsConfig",
-    "main.apps.MainConfig",
-    "news.apps.NewsConfig",
     "organizations.apps.OrganizationsConfig",
-    "servises.apps.ServisesConfig",
     
     "mptt",
+    "django_bootstrap5",
 ]
 
 MIDDLEWARE = [
