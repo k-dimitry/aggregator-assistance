@@ -1,7 +1,7 @@
-# forms.py
 from dal import autocomplete
 from django import forms
 from .models import *
+# import django_bootstrap5
 
 class OrganizationForm(forms.ModelForm):
     class Meta:
@@ -12,7 +12,7 @@ class OrganizationForm(forms.ModelForm):
             'description', 
             'logo', 
             'category_org', 
-            'target_groups'
+            # 'target_groups'
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
@@ -22,7 +22,7 @@ class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = '__all__'
-        exclude = ['organization'] # form bootsrap
+        # exclude = ['organization'] # form bootsrap
         widgets = {
             'city_region': autocomplete.ModelSelect2(
                 url='city_region-autocomplete',
@@ -35,15 +35,13 @@ class AddressForm(forms.ModelForm):
             'sub_region': autocomplete.ModelSelect2(
                 url='sub_region-autocomplete',
                 forward=['region']
-            )
+            ),
+            'street': forms.TextInput(attrs={'placeholder': 'Улица'}),
+            'house': forms.TextInput(attrs={'placeholder': 'Дом'}),
+            'apartment': forms.TextInput(attrs={'placeholder': 'Квартира'}),
         }
 
-class ContactInfoForm(forms.ModelForm):
+class OrganizationAddressForm(forms.ModelForm):
     class Meta:
-        model = ContactInfo
-        fields = ['contact_type', 'value', 'is_primary']
-
-class WorkingScheduleForm(forms.ModelForm):
-    class Meta:
-        model = WorkingSchedule
-        fields = ['day_of_week', 'opens_at', 'closes_at', 'is_round_the_clock', 'is_closed']
+        model = OrganizationAddress
+        fields = ('address',)

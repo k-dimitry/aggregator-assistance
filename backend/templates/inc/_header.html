@@ -1,0 +1,47 @@
+{% load static %}
+
+<header class="header" data-js-overlay-menu="">
+  <div class="header__inner container">
+    <a class="header__logo logo" href="/" title="Главная" aria-label="Главная">
+
+      <img
+        src="{% static 'logo.svg' %}"
+        alt=""
+        class="logo__img logo__img-scroll"
+        width="296"
+        height="94"
+        loading="eager"
+      />
+    </a>
+    <dialog class="header__overlay-menu-dialog" data-js-overlay-menu-dialog="">
+      <nav class="header__menu">
+        <ul class="header__menu-list">
+          <li class="header__menu-item">
+            <a href="/measures" class="header__menu-link">Меры поддержки</a>
+          </li>
+          <li class="header__menu-item">
+            <a href="/organizations" class="header__menu-link">Организации</a>
+          </li>
+          <li class="header__menu-item">
+            <a href="/assistance" class="header__menu-link">Нематериальная помощь</a>
+          </li>
+          <li class="header__menu-item">
+            <a href="/helping" class="header__menu-link">Помощь другим</a>
+          </li>
+        </ul>
+      </nav>
+    </dialog>
+    <div class="header__actions">
+      <button
+        class="header__button visible-tablet button"
+        type="button"
+        data-js-overlay-menu-button=""
+      >
+        <span class="button__label">Меню</span>
+      </button>
+      <a class="button__link hidden-tablet button" href="#"
+        ><span class="button__label">Чат-бот</span></a
+      >
+    </div>
+  </div>
+</header>

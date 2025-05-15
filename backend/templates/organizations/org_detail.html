@@ -1,0 +1,201 @@
+<!-- templates/organizations/organization_detail.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Заголовок и лого -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-2">
+            {% if organization.logo %}
+                <img src="{{ organization.logo.url }}" 
+                     alt="Логотип {{ organization.name }}" 
+                     class="img-fluid rounded shadow">
+            {% else %}
+                <div class="text-muted p-3 bg-light rounded">
+                    <i class="bi bi-building fs-1"></i>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-10">
+            <h1 class="display-4">{{ organization.name }}</h1>
+            <div class="badge bg-primary fs-5">{{ organization.get_org_type_display }}</div>
+        </div>
+    </div>
+
+    <!-- Основная информация -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-light">
+            <h3 class="card-title mb-0">
+                <i class="bi bi-info-circle"></i> Основная информация
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Категория:</dt>
+                        <dd class="col-sm-8">{{ organization.category_org.name }}</dd>
+
+                        <dt class="col-sm-4">Описание:</dt>
+                        <dd class="col-sm-8">{{ organization.description|linebreaks }}</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Целевые группы:</dt>
+                        <dd class="col-sm-8">
+                            {% for group in organization.target_groups.all %}
+                                <span class="badge bg-secondary me-1">{{ group.name }}</span>
+                            {% empty %}
+                                <span class="text-muted">Не указаны</span>
+                            {% endfor %}
+                        </dd>
+
+                        <dt class="col-sm-4">Дата создания:</dt>
+                        <dd class="col-sm-8">{{ organization.created_at|date:"d.m.Y" }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Адреса -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-light">
+            <h3 class="card-title mb-0">
+                <i class="bi bi-geo-alt"></i> Адреса
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for org_address in organization.organizationaddress_set.all %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-geo"></i> Адрес №{{ forloop.counter }}
+                            </h5>
+                            <p class="card-text">
+                                {{ org_address.address }}
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <small class="text-muted">
+                                Добавлен {{ org_address.created_at|date:"d.m.Y" }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col">
+                    <div class="alert alert-warning" role="alert">
+                        Адреса не указаны
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Контакты -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-light">
+            <h3 class="card-title mb-0">
+                <i class="bi bi-telephone"></i> Контакты
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                {% for contact in organization.contacts.all %}
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-{{ contact.get_icon }}"></i>
+                                {{ contact.get_contact_type_display }}
+                                {% if contact.is_primary %}
+                                    <span class="badge bg-success">Основной</span>
+                                {% endif %}
+                            </h5>
+                            <p class="card-text fs-5">
+                                {% if contact.contact_type == 'email' %}
+                                    <a href="mailto:{{ contact.value }}" 
+                                       class="text-decoration-none">
+                                        {{ contact.value }}
+                                    </a>
+                                {% elif contact.contact_type == 'website' %}
+                                    <a href="{{ contact.value }}" 
+                                       target="_blank" 
+                                       class="text-decoration-none">
+                                        {{ contact.value }}
+                                    </a>
+                                {% else %}
+                                    {{ contact.value }}
+                                {% endif %}
+                            </p>
+                            {% if contact.description %}
+                                <p class="text-muted">{{ contact.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col">
+                    <div class="alert alert-warning" role="alert">
+                        Контакты не указаны
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- График работы -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-light">
+            <h3 class="card-title mb-0">
+                <i class="bi bi-clock"></i> График работы
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>День недели</th>
+                            <th>Время работы</th>
+                            <th>Комментарий</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for schedule in organization.working_schedules.all %}
+                        <tr class="{% if schedule.is_closed %}table-danger{% endif %}">
+                            <td>{{ schedule.get_day_of_week_display }}</td>
+                            <td>
+                                {% if schedule.is_round_the_clock %}
+                                    Круглосуточно
+                                {% elif schedule.is_closed %}
+                                    Выходной
+                                {% else %}
+                                    {{ schedule.opens_at|time:"H:i" }} - {{ schedule.closes_at|time:"H:i" }}
+                                {% endif %}
+                            </td>
+                            <td>{{ schedule.comment|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">
+                                График работы не указан
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Дополнительные секции (услуги, программы и т.д.) -->
+</div>
+{% endblock %}

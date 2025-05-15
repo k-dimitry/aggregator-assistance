@@ -1,0 +1,69 @@
+{% load static %}
+
+<footer class="footer">
+  <div class="footer__inner container container__footer">
+    <nav class="footer__menu">
+      <div class="footer__logo">
+        <a
+          class="logo logo-colored logo-footer"
+          href="/"
+          title="Главная"
+          aria-label="Главная"
+        >
+          <img
+            src="{% static 'logo.svg' %}"
+            alt=""
+            class="logo__img logo__img-scroll"
+            width="296"
+            height="94"
+            loading="lazy"
+          />
+        </a>
+      </div>
+      <div class="footer__menu-column">
+        <h5 class="footer__menu-title">Разделы сайта</h5>
+        <ul class="footer__menu-list">
+          <li class="footer__menu-item">
+            <a href="/measures" class="footer__menu-link">Меры поддержки</a>
+          </li>
+          <li class="footer__menu-item">
+            <a href="/organizations" class="footer__menu-link">Организации</a>
+          </li>
+          <li class="footer__menu-item">
+            <a href="/assistance" class="footer__menu-link">Нематериальная помощь</a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer__menu-column">
+        <h5 class="footer__menu-title">Контакты</h5>
+        <ul class="footer__menu-list">
+          <li class="footer__menu-item">
+            <a
+              href="tel:+7(999)-999-99-99"
+              class="footer__menu-link"
+              >+7(999)-999-99-99</a
+            >
+          </li>
+          <li class="footer__menu-item">
+            <a
+              href="mailto:Email@mail.com"
+              class="footer__menu-link"
+              >Email@mail.com</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="footer__menu-column">
+        <h5 class="footer__menu-title">Социальные сети</h5>
+        <ul class="footer__menu-list">
+          <li class="footer__menu-item">
+            <a href="#" class="footer__menu-link">ВКонтакте</a>
+          </li>
+          <li class="footer__menu-item">
+            <a href="#" class="footer__menu-link">Telegram</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</footer>

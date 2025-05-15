@@ -1,0 +1,32 @@
+{% load static %}
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__box container">
+    <div class="hero__pano" style="background-image: url({% static 'hero.png' %})"">
+      <div class="hero__inner">
+        <h1 class="hero__inner-title">
+          Вся информация о мерах <br /><span
+            class="hero__inner-title hero__inner-blue"
+            >социальной поддержки</span
+          ><br />в одном месте
+        </h1>
+        <div class="hero__inner-body">
+          <p class="hero__inner-text">
+            Узнавайте полезную <br />информацию быстро и удобно
+          </p>
+          <button class="button" type="button">
+            <span class="button__label">Начать поиск</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% with hero=herosection %}
+<section class="hero" style="background-image: url('{{ hero.background_image.url }}');">
+    <div class="container">
+        <h1>{{ hero.title }}</h1>
+        <p>{{ hero.description }}</p>
+        <button class="cta-button">{{ hero.button_text }}</button>
+    </div>
+</section>
+{% endwith %}
