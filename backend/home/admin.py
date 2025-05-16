@@ -1,16 +1,16 @@
 from django.contrib import admin
 from django import forms
-from django.contrib import admin
-from .models import HeroSection, CustomSection
+from .models import *
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
+
+    
 class CustomSectionAdminForm(forms.ModelForm):
-    html_content = forms.CharField(widget=CKEditorUploadingWidget())
+    html_content = forms.CharField(label='Содержимое секции',widget=CKEditorUploadingWidget())
     
     class Meta:
         model = CustomSection
         fields = '__all__'
-
 
 @admin.register(HeroSection)
 class HeroSectionAdmin(admin.ModelAdmin):
@@ -49,3 +49,5 @@ class CustomSectionAdmin(admin.ModelAdmin):
     def deactivate_sections(self, request, queryset):
         queryset.update(is_active=False)
     deactivate_sections.short_description = "Деактивировать выбранные секции"
+    
+    

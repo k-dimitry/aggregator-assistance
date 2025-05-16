@@ -1,8 +1,7 @@
 from django.db import models
 
-
 class Region(models.Model):
-    name = models.CharField("Область", max_length=100)
+    name = models.CharField("Область", max_length=100, default="Нижегородская")
     
     class Meta:
         verbose_name = 'Область'
@@ -36,7 +35,6 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
-#district
 class CityRegion(models.Model):
     city = models.ForeignKey(City, verbose_name="Город",on_delete=models.CASCADE)
     name = models.CharField("Округ", max_length=100)
@@ -69,22 +67,29 @@ class Address(models.Model):
 
     def __str__(self):
         address_parts = []
-        
+    
         if self.city_region:
-            # Получаем цепочку: Region -> SubRegion -> City -> CityRegion
-            region = self.city_region.city.sub_region.region.name
-            sub_region = self.city_region.city.sub_region.name
-            city = self.city_region.city.name
-            city_region = self.city_region.name
+            region = getattr(self.city_region.city.sub_region.region, 'name', None)
+            sub_region = getattr(self.city_region.city.sub_region, 'name', None)
+            city = getattr(self.city_region.city, 'name', None)
+        
+            if region:
+                address_parts.append(region)
+            if sub_region:
+                address_parts.append(sub_region)
+            if city:
+                address_parts.append(city)
             
-            address_parts.extend([region, sub_region, city, city_region])
-        
-        address_parts.extend([self.street, self.house])
-        
+            address_parts.append(f"р-н {self.city_region.name}")
+
+        if self.street:
+            address_parts.append(f"ул. {self.street}")
+        if self.house:
+            address_parts.append(f"д. {self.house}")
         if self.apartment:
-            address_parts.append(f"кв. {self.apartment}")
+            address_parts.append(f"кв. {self.apartment}. ")
         
-        return ", ".join(address_parts)
+        return ", ".join(filter(None, address_parts))
 
 class CategoryOrg(models.Model):
     name = models.CharField("Название", max_length=100)
@@ -101,29 +106,20 @@ class CategoryOrg(models.Model):
         return self.name
 
 class TargetGroup(models.Model):
-    # class GroupType(models.TextChoices):
-    #     AGE = 'age', 'Возрастная группа'
-    #     SOCIAL = 'social', 'Социальная категория'
-    #     HEALTH = 'health', 'Состояние здоровья'
-    #     OCCUPATION = 'occupation', 'Род деятельности'
-
+    
     name = models.CharField(
         "Название группы", 
         max_length=150,
         unique=True
     )
+    
     slug = models.SlugField(
         "URL", 
         max_length=150,
         unique=True,
         help_text="Уникальное имя для URL (латиница, цифры и дефисы)"
     )
-    # group_type = models.CharField(
-    #     "Тип группы",
-    #     max_length=20,
-    #     choices=GroupType.choices,
-    #     default=GroupType.SOCIAL
-    # )
+    
     description = models.TextField(
         "Описание", 
         blank=True,
@@ -136,21 +132,13 @@ class TargetGroup(models.Model):
         blank=True,
         help_text="Класс иконки"
     )
-    # age_min = models.PositiveSmallIntegerField(
-    #     "Минимальный возраст", 
-    #     null=True, 
-    #     blank=True
-    # )
-    # age_max = models.PositiveSmallIntegerField(
-    #     "Максимальный возраст", 
-    #     null=True, 
-    #     blank=True
-    # )
+
     is_active = models.BooleanField(
         "Активна", 
         default=True,
         help_text="Отображать группу в интерфейсе"
     )
+    
     created_at = models.DateTimeField("Созданно", auto_now_add=True)
     updated_at = models.DateTimeField("Обновленно", auto_now=True)
 
@@ -164,17 +152,6 @@ class TargetGroup(models.Model):
 
     def __str__(self):
         return self.name
-        # return f"{self.get_group_type_display()}: {self.name}"
-
-    # def age_range(self):
-    #     """Возвращает форматированный возрастной диапазон"""
-    #     if self.age_min and self.age_max:
-    #         return f"{self.age_min}-{self.age_max} лет"
-    #     elif self.age_min:
-    #         return f"от {self.age_min} лет"
-    #     elif self.age_max:
-    #         return f"до {self.age_max} лет"
-    #     return "-"
 
 class Service(models.Model):
     """Меры поддержки """
@@ -201,7 +178,6 @@ class Service(models.Model):
     requirement = models.TextField("Условия получения", max_length=2000, blank=True)
     is_free = models.BooleanField("Бесплатно")
     is_online_available = models.BooleanField("Доступно онлайн")
-    # documents = models.ForeignKey(Document, verbose_name="Документы", on_delete=models.CASCADE)
 
     is_active = models.BooleanField(
         "Активна", 
@@ -269,10 +245,10 @@ class Organization(models.Model):
 class OrganizationAddress(models.Model):
     organization = models.ForeignKey(Organization, verbose_name="Организация",on_delete=models.CASCADE)
     address = models.ForeignKey(Address, verbose_name="Адрес",on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Созданно",)  # Опционально
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Созданно",)  
 
     class Meta:
-        unique_together = ('organization', 'address')  # Запрет дублирования
+        unique_together = ('organization', 'address') 
         verbose_name = "Связь организации с адресом"
         verbose_name_plural = "Связи организаций с адресами"
 
@@ -283,7 +259,6 @@ class OrganizationAddress(models.Model):
         )
 
 class ContactInfo(models.Model):
-    """Универсальная модель контактной информации"""
     class ContactType(models.TextChoices):
         PHONE = 'phone', 'Телефон'
         EMAIL = 'email', 'Email'
@@ -322,7 +297,6 @@ class ContactInfo(models.Model):
         return icons.get(self.contact_type, 'info-circle')
 
 class WorkingSchedule(models.Model):
-    """Детализированный график работы"""
     class DayOfWeek(models.IntegerChoices):
         MONDAY = 0, 'Понедельник'
         TUESDAY = 1, 'Вторник'
@@ -378,7 +352,6 @@ class WorkingSchedule(models.Model):
     #     return f"{self.get_day_of_week_display()}: {self.opens_at} - {self.closes_at}"
 
 class GeoLocation(models.Model):
-    """Геолокация организации"""
     organization = models.OneToOneField(
         Organization,
         on_delete=models.CASCADE,

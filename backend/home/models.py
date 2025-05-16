@@ -1,6 +1,4 @@
 from django.db import models
-
-from django.db import models
 from django.utils.safestring import mark_safe
 
 class HeroSection(models.Model):
@@ -12,8 +10,8 @@ class HeroSection(models.Model):
         upload_to='hero/'
     )
     is_active = models.BooleanField('Активный', default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
 
     class Meta:
         verbose_name = 'Секция Hero'
@@ -32,8 +30,8 @@ class CustomSection(models.Model):
     name = models.CharField('Название секции', max_length=100, unique=True)
     html_content = models.TextField('HTML содержимое')
     is_active = models.BooleanField('Активная', default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
 
     class Meta:
         verbose_name = 'Кастомная секция'
@@ -41,3 +39,4 @@ class CustomSection(models.Model):
 
     def __str__(self):
         return self.name
+    

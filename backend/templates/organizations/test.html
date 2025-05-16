@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>РумТибет</title>
+    <meta name="description" content="Его корни уходят в один фрагмент классической латыни 45 года н.э., то есть более двух тысячелетий назад. Ричард МакКлинток, профессор латыни из колледжа Hampden-Sydney" />
+    <link rel="stylesheet" href="../src/css/style.css" />
+  </head>
+  <body>
+    
+
+    <secton class="main container">
+      <header class="header">
+        <div class="header__logo">
+          <img class="header__logo-img" src="images/logo.svg" alt="logo" />
+        </div>
+        <nav class="header__nav ">
+          <ul class="header__nav-list nav-list">
+            <li class="nav-list__item"><a href="#">Главная</a></li>
+            <li class="nav-list__item"><a href="#">Про гида</a></li>
+            <li class="nav-list__item"><a href="#">Программа тура</a></li>
+            <li class="nav-list__item"><a href="#">Стоимость</a></li>
+            <li class="nav-list__item"><a href="#">Блог</a></li>
+            <li class="nav-list__item"><a href="#">Контакты</a></li>
+          </ul>
+        </nav>
+        <button class="header__button">Консультация</button>
+        <button class="hamburger">
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+      </button>
+      </header>
+
+      <h1 class="main__title">
+        Насладись прогулкой в горах<br />
+        с командой единомышленников
+      </h1>
+
+      <form class="search-form main__search-form">
+        <ul class="search-form__list">
+          <li class="search-form__item">
+            <select class="search-form__select" id="location" name="location">
+              <option value="" disabled selected hidden>
+                Локация для тура
+              </option>
+              <option value="tibet">Тибет</option>
+              <option value="china">Китай</option>
+              <option value="india">Индия</option>
+            </select>
+            <label class="search-form__label" for="location"
+              >выберите из списка</label
+            >
+          </li>
+
+          <li class="search-form__item">
+            <div class="search-form__input-wrapper">
+              <input
+                class="search-form__input"
+                type="text"
+                id="date-picker"
+                name="date-picker"
+                placeholder="Дата похода"
+                readonly
+              />
+            </div>
+            <label class="search-form__label" for="date-picker"
+              >укажите диапазон</label
+            >
+          </li>
+
+          <li class="search-form__item">
+            <select
+              class="search-form__select"
+              id="participants"
+              name="participants"
+            >
+              <option value="" disabled selected hidden>Участники</option>
+              <option value="4">4 человека</option>
+              <option value="6">6 человек</option>
+              <option value="8">8 человек</option>
+            </select>
+            <label class="search-form__label" for="participants"
+              >минимум 4 человека</label
+            >
+          </li>
+
+          <li class="search-form__item">
+            <button class="search-form__button" type="submit">
+              Найти программу
+            </button>
+          </li>
+        </ul>
+      </form>
+
+    </secton>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

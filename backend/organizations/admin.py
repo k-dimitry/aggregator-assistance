@@ -1,68 +1,63 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .forms import AddressForm
-from django.http import HttpRequest
-
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
 from .models import *
 
-# @admin.register(Region)
+
+class ServiceAdminForm(forms.ModelForm):
+    desc = forms.CharField(label='Описание', widget=CKEditorUploadingWidget())
+    
+    class Meta:
+        model = Service
+        fields = '__all__'
+        
+class OrganizationAdminForm(forms.ModelForm):
+    description = forms.CharField(label='Описание',widget=CKEditorUploadingWidget())
+    
+    class Meta:
+        model = Organization
+        fields = '__all__'
+
+@admin.register(Region)
 class RegionAdmin(admin.ModelAdmin):
-    search_fields = ['name']
-    list_display = ['name']
+    def has_module_permission(self, request):
+        return False  
 
-
-# @admin.register(SubRegion)
+@admin.register(SubRegion)
 class SubRegionAdmin(admin.ModelAdmin):
-    search_fields = ['name']
-    list_display = ['name', 'region']
+    def has_module_permission(self, request):
+        return False 
 
-# @admin.register(City)
+@admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    search_fields = ['name']
-    list_display = ['name', 'sub_region']
+    def has_module_permission(self, request):
+        return False 
 
-# @admin.register(CityRegion)
+@admin.register(CityRegion)
 class CityRegionAdmin(admin.ModelAdmin):
-    search_fields = ['name']
-    list_display = ['name', 'city']
+    def has_module_permission(self, request):
+        return False  
 
-# class AddressInline(admin.StackedInline):
-#     model = Address
-#     extra = 1
-#     fields = (
-#         ('city_region', 'city'),
-#         ('sub_region', 'region'),
-#         ('street', 'house', 'apartment'),
-#     )
-#     # autocomplete_fields = ['city_region', 'city', 'sub_region']
-#     verbose_name = "Адрес"
-#     verbose_name_plural = "Адреса организации"
-
-#     def get_formset(self, request, obj=None, **kwargs):
-#         formset = super().get_formset(request, obj, **kwargs)
-#         formset.form.base_fields['city_region'].widget.can_add_related = False
-#         formset.form.base_fields['city'].widget.can_add_related = False
-#         formset.form.base_fields['sub_region'].widget.can_add_related = False
-#         return formset
-
+@admin.register(WorkingSchedule)
+class WorkingScheduleAdmin(admin.ModelAdmin):
+    def has_module_permission(self, request):
+        return False  
 
 @admin.register(OrganizationAddress)
 class OrganizationAddressAdmin(admin.ModelAdmin):
     list_display = ('organization', 'address', 'created_at')
     list_filter = ('organization', 'address')
     
-# @admin.register(TargetGroup)
+@admin.register(TargetGroup)
 class TargetGroupAdmin(admin.ModelAdmin):
     list_display = (
         'name',
-        # 'group_type',
-        # 'age_range',
         'icon_preview',
         'is_active',
         'updated_at'
     )
     list_filter = (
-        # 'group_type',
         'is_active',
         'created_at'
     )
@@ -78,7 +73,6 @@ class TargetGroupAdmin(admin.ModelAdmin):
             'fields': (
                 'name',
                 'slug',
-                # 'group_type',
                 'is_active'
             )
         }),
@@ -89,13 +83,6 @@ class TargetGroupAdmin(admin.ModelAdmin):
             ),
             'classes': ('collapse',)
         }),
-        # ('Возрастные параметры', {
-        #     'fields': (
-        #         'age_min',
-        #         'age_max'
-        #     ),
-            # 'classes': ('collapse',)
-        # }),
         ('Даты', {
             'fields': (
                 'created_at',
@@ -115,24 +102,10 @@ class TargetGroupAdmin(admin.ModelAdmin):
             return format_html(f'<i class="bi {obj.icon} fs-4"></i>')
         return '-'
 
-class ContactInfoInline(admin.TabularInline):
-    model = ContactInfo
-    extra = 1  # Количество пустых форм для добавления
-    fields = ("contact_type", "value", "is_primary", "priority")
-    ordering = ("-is_primary", "priority")
-
-class GeoLocationInline(admin.StackedInline):
-    model = GeoLocation
-    extra = 1
-    fields = ("latitude", "longitude")
-
-
-class SocialMediaProfileInline(admin.TabularInline):
-    model = SocialMediaProfile
-    extra = 1
-    fields = ("platform", "profile_url", "is_verified")
-
+@admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
+    form = ServiceAdminForm
+    filter_horizontal = ['target_groups', 'organization']
     prepopulated_fields = {'slug': ('name',)}
     search_fields = [
         "name",
@@ -143,11 +116,17 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = ("name", "is_free", "is_online_available")
     list_filter = ("is_free", "is_online_available")
 
+@admin.register(OrganizationProgram)
 class OrganizationProgramAdmin(admin.ModelAdmin):
     list_display = ("organization", "name", "start_date", "end_date", "is_free")
 
-class SocialMediaProfileAdmin(admin.ModelAdmin):
-    list_display = ("organization",)
+@admin.register(CategoryOrg)
+class CategoryOrgAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+    list_display = (
+        "name",
+        "slug",
+    )
 
 class GeoLocationAdmin(admin.ModelAdmin):
     list_display = (
@@ -156,46 +135,43 @@ class GeoLocationAdmin(admin.ModelAdmin):
         "longitude",
     )
 
-# class WorkingSchedule(admin.ModelAdmin):
-#     list_display = ("organization",)
+class GeoLocationInline(admin.StackedInline):
+    model = GeoLocation
+    extra = 1
+    classes = ["collapse"]
+    fields = ("latitude", "longitude")
 
 class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ("organization", "value", "is_primary")
 
-class CategoryOrgAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
-    list_display = (
-        "name",
-        "slug",
-    )
+class ContactInfoInline(admin.TabularInline):
+    model = ContactInfo
+    extra = 1 
+    classes = ["collapse"]
+    fields = ("contact_type", "value", "is_primary", "priority")
+    ordering = ("-is_primary", "priority")
+
+class SocialMediaProfileAdmin(admin.ModelAdmin):
+    list_display = ("organization",)
+
+class SocialMediaProfileInline(admin.TabularInline):
+    model = SocialMediaProfile
+    extra = 1
+    classes = ["collapse"]
+    fields = ("platform", "profile_url", "is_verified")
 
 class OrganizationAddressInline(admin.TabularInline):
     model = OrganizationAddress
-    extra = 1  # Количество пустых форм для добавления новых адресов
+    extra = 1  
     autocomplete_fields = ['address']
+    classes = ["collapse"]
     verbose_name = "Связанный адрес"
     verbose_name_plural = "Связанные адреса"
-    # Опционально: фильтрация существующих адресов
-    # raw_id_fields = ('address',)  # Покажет поисковую форму вместо выпадающего списка
-
-# class OrganizationServiceInline(admin.TabularInline):
-#     model = OrganizationService
-#     extra = 1
-#     autocomplete_fields = ["service"]
-#     fields = ("service", "is_main_service", "duration")
-    
-#     # Дополнительные настройки (опционально)
-#     # fields = ('service', 'price', 'price_type', 'is_main_service')
-#     # show_change_link = True
-
-@admin.register(WorkingSchedule)
-class WorkingScheduleAdmin(admin.ModelAdmin):
-    list_display = ('organization', 'day_of_week', 'is_closed', 'is_round_the_clock')
-    list_filter = ('organization', 'day_of_week', 'is_closed', 'is_round_the_clock')
 
 class WorkingScheduleInline(admin.TabularInline):
     model = WorkingSchedule
     extra = 0
+    classes = ["collapse"]
     max_num = 7
     can_delete = False
     readonly_fields = ('day_of_week_display', 'schedule_summary')
@@ -208,7 +184,7 @@ class WorkingScheduleInline(admin.TabularInline):
         'is_closed',
         'comment'
     )
-
+    
     def day_of_week_display(self, obj):
         return obj.get_day_of_week_display()
     day_of_week_display.short_description = 'День недели'
@@ -226,7 +202,36 @@ class WorkingScheduleInline(admin.TabularInline):
     def has_add_permission(self, request, obj=None):
         return False
 
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    search_fields = [
+        'street', 
+        'house',
+        'city__name',
+        'sub_region__name',
+        'region__name'
+    ]
+    
+    # filter_horizontal = ('region', 'sub_region', 'city', 'city_region')
+    # raw_id_fields = ('region', 'sub_region', 'city', 'city_region')
+    list_display = ("__str__", "city", "city_region", 'street')
+    list_filter = ( 'city_region', 'street')
+
+    @admin.display(description="Регион")
+    def region(self, obj):
+        return obj.city_region.city.sub_region.region if obj.city_region else None
+
+    @admin.display(description="Субрегион")
+    def sub_region(self, obj):
+        return obj.city_region.city.sub_region if obj.city_region else None
+
+    @admin.display(description="Город")
+    def city(self, obj):
+        return obj.city_region.city if obj.city_region else None
+
+@admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
+    form = OrganizationAdminForm
     prepopulated_fields = {'slug': ('name',)}
     list_display = (
         "name",
@@ -234,28 +239,29 @@ class OrganizationAdmin(admin.ModelAdmin):
         "org_type",
     )
     inlines = [
-        # AddressInline,
         OrganizationAddressInline,
         GeoLocationInline,
-        # OrganizationServiceInline,
         ContactInfoInline,
         SocialMediaProfileInline,
         WorkingScheduleInline,
         
     ]
 
-    # Для ManyToMany-полей используйте фильтры
-    # filter_horizontal = ('categories', 'services', 'target_groups')
-    # filter_horizontal = ['name', 'target_groups']
-    # Основные поля
     fieldsets = (
-        (None, {"fields": ("name", "slug", 'org_type', "description", "logo", "category_org")}),
+        (None, {
+            "fields": (
+                "name", 
+                "slug", 
+                'org_type', 
+                "description", 
+                "logo", 
+                "category_org"
+            ),
+        }),      
     )
 
     def display_addresses(self, obj):
-        # Получаем все адреса организации
         addresses = obj.address.all()
-        # Формируем HTML-список адресов
         address_list = [f"{address}" for address in addresses]
         return (
             format_html("<ul>{}</ul>", "".join(address_list)) if address_list else "-"
@@ -280,40 +286,3 @@ class OrganizationAdmin(admin.ModelAdmin):
                     }
                 )
 
-class AddressAdmin(admin.ModelAdmin):
-    form = AddressForm
-    search_fields = [
-        'street', 
-        'house',
-        'city__name',
-        'sub_region__name',
-        'region__name'
-    ]
-
-    list_display = ("__str__", "city", "city_region", 'street')
-    list_filter = ( 'city_region', 'street')
-
-    @admin.display(description="Регион")
-    def region(self, obj):
-        return obj.city_region.city.sub_region.region if obj.city_region else None
-
-    @admin.display(description="Субрегион")
-    def sub_region(self, obj):
-        return obj.city_region.city.sub_region if obj.city_region else None
-
-    @admin.display(description="Город")
-    def city(self, obj):
-        return obj.city_region.city if obj.city_region else None
-
-    
-admin.site.register(TargetGroup, TargetGroupAdmin)
-admin.site.register(Service, ServiceAdmin)
-admin.site.register(OrganizationProgram, OrganizationProgramAdmin)
-# admin.site.register(SocialMediaProfile, SocialMediaProfileAdmin)
-# admin.site.register(GeoLocation, GeoLocationAdmin)
-# admin.site.register(WorkingSchedule)
-# admin.site.register(ContactInfo, ContactInfoAdmin)
-admin.site.register(CategoryOrg, CategoryOrgAdmin)
-admin.site.register(Organization, OrganizationAdmin)
-admin.site.register(Address, AddressAdmin)
-admin.site.register([Region, SubRegion, City, CityRegion])
