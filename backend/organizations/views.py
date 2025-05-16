@@ -1,10 +1,19 @@
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView
+from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
-from django.shortcuts import render
-from django.urls import reverse_lazy
 from .models import *
 from .forms import *
 from django.forms import inlineformset_factory
+
+def group_detail(request, pk):
+    group = get_object_or_404(TargetGroup, pk=pk)
+    services = group.services.filter(is_active=True)
+    
+    context = {
+        'group': group,
+        'services': services
+    }
+    return render(request, 'organizations/group_detail.html', context)
 
 
     
@@ -59,9 +68,9 @@ class OrganizationList(ListView):
 
 OrganizationAddressFormSet = inlineformset_factory(
     Organization,
-    OrganizationAddress,  # ← Используем промежуточную модель
+    OrganizationAddress, 
     form=OrganizationAddressForm,
-    fields=("address",),  # Указываем какие поля показывать
+    fields=("address",),  
     extra=1,
     can_delete=True,
     widgets={

@@ -1,8 +1,13 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <main class="content">
   {% include 'inc/_hero.html' %}
+
   <section class="agreement container">
-    <h2>Основные разделы</h2>
+    {% include 'inc/_statistic.html' %}
+  </section>
+
+  <section class="agreement container">
+    {% include 'inc/_target.html' %}
   </section>
 
   {% for section in custom_sections %}
