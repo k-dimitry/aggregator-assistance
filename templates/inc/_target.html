@@ -1,22 +1,19 @@
-<div class="container">
-    <h2 class="section-title text-center mb-5">Социальные группы</h2>
-    <div class="row">
+<div class="container social-groups">
+    <h2 class="section-title h2">Социальные группы</h2>
+    
+    <div class="groups-grid">
         {% for group in target_groups %}
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card group-card">
-                <div class="card-body">
-                    <h3 class="card-title">{{ group.name }}</h3>
-                    <p class="card-text">Доступно мер поддержки: {{ group.service_count }}</p>
-                    <a href="{% url 'group-detail' group.id %}" class="btn btn-outline-primary">
-                        Подробнее
-                    </a>
-                </div>
+        <div class="group-card">
+            <div class="group-card__content">
+                <h3 class="group-card__title h3">{{ group.name }}</h3>
+                <p class="group-card__text">Доступно мер поддержки: {{ group.service_count }}</p>
+                <a href="{% url 'group-detail' group.id %}" class="group-card__link button">
+                    Подробнее
+                </a>
             </div>
         </div>
         {% empty %}
-        <div class="col-12 text-center">
-            <p class="text-muted">Нет активных социальных групп</p>
-        </div>
+        <p class="groups-empty">Нет активных социальных групп</p>
         {% endfor %}
     </div>
 </div>

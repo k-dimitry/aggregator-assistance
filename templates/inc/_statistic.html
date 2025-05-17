@@ -1,22 +1,16 @@
-<div class="container">
-    <div class="row text-center">
-        <div class="col-md-4">
-            <div class="stat-item">
-                <h3 class="stat-number">{{ total_organizations }}</h3>
-                <p class="stat-label">Организаций</p>
-            </div>
+<div class="container stats">
+    <div class="stats-grid">
+        <div class="stats-item">
+            <h3 class="stats-number h3">{{ total_organizations }}</h3>
+            <p class="stats-label">Организаций</p>
         </div>
-        <div class="col-md-4">
-            <div class="stat-item">
-                <h3 class="stat-number">{{ total_services }}</h3>
-                <p class="stat-label">Мер поддержки</p>
-            </div>
+        <div class="stats-item">
+            <h3 class="stats-number h3">{{ total_services }}</h3>
+            <p class="stats-label">Мер поддержки</p>
         </div>
-        <div class="col-md-4">
-            <div class="stat-item">
-                <h3 class="stat-number">{{ target_groups|length }}</h3>
-                <p class="stat-label">Социальных групп</p>
-            </div>
+        <div class="stats-item">
+            <h3 class="stats-number h3">{{ target_groups|length }}</h3>
+            <p class="stats-label">Социальных групп</p>
         </div>
     </div>
 </div>
