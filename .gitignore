@@ -11,8 +11,8 @@ local_settings.py
 /static/
 node_modules
 dist
-static
 venv/
 venv
 media
-migrations
+.venv/
+.idea/
