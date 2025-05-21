@@ -1,0 +1,117 @@
+
+
+.stats {
+    padding: var(--section-padding-y) 0;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 0.5rem + 2vw, 3rem);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .stats-item {
+    text-align: center;
+    padding: 2rem;
+    background: var(--color-white);
+    border-radius: var(--border-radius-m);
+    box-shadow: 0 4px 20px rgba(7, 7, 7, 0.1);
+  }
+  
+  .stats-number {
+    color: var(--color-blue-1);
+    margin-bottom: 0.5em;
+  }
+  
+  .stats-label {
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+    color: var(--color-grey-dark);
+    font-weight: 500;
+  }
+  
+  @media (width <= 767px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  
+    .stats-item {
+      padding: 1.5rem;
+    }
+  }
+
+
+  .social-groups {
+    padding: var(--section-padding-y) 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: clamp(2rem, 1.5rem + 2vw, 4rem);
+}
+
+.groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.group-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius-m);
+    box-shadow: 0 4px 20px rgba(7, 7, 7, 0.1);
+    padding: 2rem;
+    transition: transform var(--transition-duration);
+}
+
+.group-card:hover {
+    transform: translateY(-5px);
+}
+
+.group-card__content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 1.5rem;
+}
+
+.group-card__title {
+    color: var(--color-blue-1);
+    margin: 0;
+}
+
+.group-card__text {
+    color: var(--color-grey-dark);
+    flex-grow: 1;
+    margin: 0;
+}
+
+.group-card__link {
+    align-self: flex-start;
+    padding: 0.75rem 2rem;
+    background: var(--color-blue-2);
+    border-radius: var(--border-radius-xxxs);
+    text-decoration: none;
+}
+
+.groups-empty {
+    text-align: center;
+    color: var(--color-grey-dark);
+    grid-column: 1 / -1;
+    padding: 2rem;
+}
+
+@media (width <= 767px) {
+    .groups-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .group-card {
+        padding: 1.5rem;
+    }
+}
+  

@@ -1,0 +1,53 @@
+#header{
+    background-color: aliceblue !important;
+    color: #0294FC !important;
+}
+
+
+#header a:link, #header a:visited, #logout-form button {
+    color: #070707 !important;
+}
+
+.theme-toggle svg.theme-icon-when-light {
+    fill: white !important;
+    color: #0294FC !important;
+}
+
+
+.module h2, .module caption, .inline-group {
+    background: #0D52BC !important;
+}
+
+div.breadcrumbs {
+    background: #3409D2 !important;
+}
+
+fieldset .fieldset-heading, fieldset .inline-heading, :not(.inline-related) .collapse summary {
+    background: #0D52BC !important;
+}
+
+input[type=submit].default, .submit-row input.default {
+    background: #0D52BC !important;
+}
+
+
+.button:active, input[type=submit]:active, input[type=button]:active, .button:focus, input[type=submit]:focus, input[type=button]:focus, .button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: #25B7FF !important;
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: #0D52BC !important;
+}
+
+.selector-chosen-title {
+    background:  #0D52BC !important;
+}
+
+#toolbar form input[type="submit"] {
+    background: var(--body-bg);
+    color: white !important;
+}
+
+#changelist .actions .button {
+    color: white !important;
+}
