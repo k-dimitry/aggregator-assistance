@@ -173,8 +173,8 @@ class Service(models.Model):
         help_text="Организации, которые оказывают меру"
     )
     
-    legal = models.CharField("Закон", max_length=500)
-    url_legal = models.URLField("Ссылка на закон", max_length=500)
+    legal = models.CharField("Закон", max_length=500, blank=True, null=True)
+    url_legal = models.URLField("Ссылка на закон", max_length=500, blank=True, null=True)
     requirement = models.TextField("Условия получения", max_length=3000, blank=True)
     is_free = models.BooleanField("Бесплатно")
     is_online_available = models.BooleanField("Доступно онлайн")
