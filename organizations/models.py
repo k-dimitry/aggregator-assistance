@@ -9,7 +9,7 @@ class Region(models.Model):
         ordering = ['name']
     
     def __str__(self):
-        return self.name
+        return f'{self.name} область'
 
 class SubRegion(models.Model):
     region = models.ForeignKey(Region, verbose_name="Регион",on_delete=models.CASCADE)
@@ -174,8 +174,8 @@ class Service(models.Model):
     )
     
     legal = models.CharField("Закон", max_length=500)
-    url_legal = models.SlugField("Ссылка на закон", max_length=500)
-    requirement = models.TextField("Условия получения", max_length=2000, blank=True)
+    url_legal = models.URLField("Ссылка на закон", max_length=500)
+    requirement = models.TextField("Условия получения", max_length=3000, blank=True)
     is_free = models.BooleanField("Бесплатно")
     is_online_available = models.BooleanField("Доступно онлайн")
 
